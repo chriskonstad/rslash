@@ -1,6 +1,13 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// TODO store all visited subreddits as strings in an array
+// TODO store { subreddit: visit count } dictionary for sorting
+
+
+// Load the data at startup
+chrome.omnibox.onInputStarted.addListener(
+  function() {
+    console.log("Extension loaded");
+  }
+);
 
 // This event is fired each time the user updates the text in the omnibox,
 // as long as the extension's keyword mode is still active.
@@ -15,8 +22,10 @@ chrome.omnibox.onInputChanged.addListener(
 
 // This event is fired with the user accepts the input in the omnibox.
 chrome.omnibox.onInputEntered.addListener(
-  function(text) {
+  function(subreddit) {
     chrome.tabs.getSelected(null, function(tab){
-      chrome.tabs.update(tab.id, {url: "https://reddit.com/r/" + text});
+      var url = "https://reddit.com/r/" + subreddit;
+      console.log("Redirecting to: " + url);
+      chrome.tabs.update(tab.id, {url: url});
     })
   });
