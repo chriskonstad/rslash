@@ -1,10 +1,12 @@
+// Chris Konstad, 2016
 // TODO remove alerts for production?
 
 // important variables
 var storage = chrome.storage.sync;
 var SUBS = "subs";
-
 var subs = [];  // list of all subreddits
+
+// TODO autoload all counts at startup by using get() with null
 var counts = {};  // subreddit => visit count
 
 // Mark subreddit as visited
@@ -60,22 +62,37 @@ chrome.omnibox.onInputStarted.addListener(
   }
 );
 
+// Filter a list using substrings
+function filterSubreddits(text, subs) {
+  var ret = [];
+  subs.forEach(function(sub) {
+    if(-1 != sub.indexOf(text)) {
+      ret.push(sub);
+    }
+  });
+  return ret;
+}
+
 // This event is fired each time the user updates the text in the omnibox,
 // as long as the extension's keyword mode is still active.
 chrome.omnibox.onInputChanged.addListener(
   function(text, suggest) {
     console.log('inputChanged: ' + text);
     // TODO add smart suggestions
-    // TODO match substring
     // TODO match fuzzy substrings
     // TODO sort by closeness
+
+    // Get visited subreddits that contain the text as a substring
+    var subsToSuggest = filterSubreddits(text, subs);
+
+    // Build suggestions to display
     var suggestions = [];
-    for (var subreddit in counts) {
+    subsToSuggest.forEach(function(sub) {
       suggestions.push({
-        content: subreddit,
-        description: subreddit + "(" + counts[subreddit] + ")"
+        content: sub,
+        description: sub + "(" + counts[sub] + ")"
       });
-    }
+    });
 
     // Sort by visit count
     suggestions.sort(function(a,b) {
