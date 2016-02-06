@@ -6,4 +6,5 @@
 * [ ] don't save a subreddit if it doesn't exist (URL is a search page)
 * [x] don't save data when in incognito, per google guidelines
 * [ ] be able to remove select subreddits from list
-* [ ] be able to clear data
+* [x] be able to clear data
+* [ ] make options page nicer
