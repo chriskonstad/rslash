@@ -2,9 +2,20 @@
 <html>
 <head>
   <title>r/ Options</title>
+  <style>
+    .subreddit_item {
+      display: block;
+      margin-top: 5px;
+    }
+  </style>
 </head>
 <body>
+  <h1>Clear All Stored Subreddits</h1>
   <button id="clear_subreddits">Clear Subreddits</button>
+
+  <h1>Remove Selected Subreddits</h1>
+  <button id="remove_subreddits">Remove Selected Subreddits</button>
+  <div id="subreddit_list"></div>
 
   <script src="options.js"></script>
 </body>
