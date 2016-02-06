@@ -7,4 +7,7 @@
 * [x] don't save data when in incognito, per google guidelines
 * [ ] be able to remove select subreddits from list
 * [x] be able to clear data
-* [ ] make options page nicer
+* [x] make options page nicer
+* [ ] reset the counts on a schedule (weekly?), but keep the subreddit listed
+      so that new subreddits can surpass old subreddits if they're visited a lot.
+      Or do exponentially weighted moving average stuff instead.
