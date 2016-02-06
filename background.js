@@ -60,7 +60,7 @@ chrome.omnibox.onInputStarted.addListener(
 function filterSubreddits(text, subs) {
   var ret = [];
   subs.forEach(function(sub) {
-    if(-1 != sub.indexOf(text)) {
+    if(-1 != sub.toLowerCase().indexOf(text.toLowerCase())) {
       ret.push(sub);
     }
   });
@@ -71,7 +71,7 @@ function filterSubreddits(text, subs) {
 // as long as the extension's keyword mode is still active.
 chrome.omnibox.onInputChanged.addListener(
   function(text, suggest) {
-    console.log('inputChanged: ' + text);
+    console.log('inputChanged: "' + text + '"');
     // TODO add smart suggestions
     // TODO match fuzzy substrings
     // TODO sort by closeness
@@ -84,7 +84,7 @@ chrome.omnibox.onInputChanged.addListener(
     subsToSuggest.forEach(function(sub) {
       suggestions.push({
         content: sub,
-        description: sub + "(" + counts[sub] + ")"
+        description: sub
       });
     });
 
