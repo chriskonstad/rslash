@@ -3,10 +3,7 @@
 
 // important variables
 var storage = chrome.storage.sync;
-var SUBS = "subs";
 var subs = [];  // list of all subreddits
-
-// TODO autoload all counts at startup by using get() with null
 var counts = {};  // subreddit => visit count
 
 // Mark subreddit as visited
@@ -15,14 +12,6 @@ function saveSubreddit(subreddit) {
   if(-1 == subs.indexOf(subreddit)) {
     subs.push(subreddit);
   }
-  var data = {};
-  data[SUBS] = subs;
-  storage.set(data, function() {
-    if(chrome.runtime.lastError) {
-      console.error(chrome.runtime.lastError);
-      alert(chrome.runtime.lastError);
-    }
-  });
 
   // Get the current visit count for the subreddit
   storage.get(subreddit, function(items) {
@@ -47,11 +36,16 @@ function saveSubreddit(subreddit) {
 }
 
 function loadData() {
-  storage.get(SUBS, function(items) {
-    subs = items[SUBS];
-    if(undefined === subs) {
-      subs = [];
+  console.log("loading data");
+  storage.get(null, function(items) {
+    subs = [];
+    for(var key in items) {
+        counts = items;
+        subs.push(key);
     }
+    //console.log(JSON.stringify(items));
+    //console.log(JSON.stringify(subs));
+    //console.log(JSON.stringify(counts));
   });
 }
 
