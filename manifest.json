@@ -1,0 +1,13 @@
+{
+  "name": "reddit.com/r/",
+  "description" : "Quickly jump to subreddit by typing 'r' into the omnibar",
+  "version": "1.0",
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "omnibox": { "keyword" : "r" },
+  "manifest_version": 2,
+  "permissions": [
+    "tabs"
+  ]
+}
