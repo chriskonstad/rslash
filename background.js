@@ -107,14 +107,31 @@ chrome.omnibox.onInputChanged.addListener(
 chrome.omnibox.onInputEntered.addListener(
   function(subreddit) {
     chrome.tabs.query({currentWindow: true, active: true}, function(tab){
-      var url = "https://reddit.com/r/" + subreddit;
+      var url = "https://www.reddit.com/r/" + subreddit;
       console.log("Redirecting to: " + url);
-      chrome.tabs.update(tab.id, {url: url});
+      chrome.tabs.update(tab.id, {url: url}, function() {
+        chrome.tabs.onUpdated.addListener(function updateListener(id, changes, tab) {
 
-      // Add subreddit to visited-subreddit list
-      // Don't save any data in incognito mode
-      if(!tab.incognito) {
-        saveSubreddit(subreddit);
-      }
+          // TODO check for 302 and 404's
+
+          // Check if the subreddit is loading, or if redirected to search page
+          console.log(changes);
+          if(id === tab.id && "loading" === changes.status) {
+            // Add subreddit to visited-subreddit list
+            // Don't save any data in incognito mode
+            console.log("'" + url + "' vs '" + changes.url + "'");
+            console.log(url == changes.url);
+            console.log(!tab.incognito);
+            if(!tab.incognito && url == changes.url) {
+              saveSubreddit(subreddit);
+            } else {
+              console.log("Didn't save");
+            }
+
+            chrome.tabs.onUpdated.removeListener(updateListener);
+          }
+        });
+      });
     })
   });
+
