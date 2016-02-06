@@ -26,6 +26,8 @@ function saveSubreddit(subreddit) {
     counts[subreddit] = count;
     var data = {};
     data[subreddit] = count;
+
+    // Save the value
     storage.set(data, function() {
       if(chrome.runtime.lastError) {
         console.error(chrome.runtime.lastError);
@@ -104,12 +106,15 @@ chrome.omnibox.onInputChanged.addListener(
 // This event is fired with the user accepts the input in the omnibox.
 chrome.omnibox.onInputEntered.addListener(
   function(subreddit) {
-    chrome.tabs.getSelected(null, function(tab){
+    chrome.tabs.query({currentWindow: true, active: true}, function(tab){
       var url = "https://reddit.com/r/" + subreddit;
       console.log("Redirecting to: " + url);
       chrome.tabs.update(tab.id, {url: url});
 
       // Add subreddit to visited-subreddit list
-      saveSubreddit(subreddit);
+      // Don't save any data in incognito mode
+      if(!tab.incognito) {
+        saveSubreddit(subreddit);
+      }
     })
   });
