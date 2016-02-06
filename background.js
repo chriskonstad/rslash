@@ -57,6 +57,7 @@ chrome.omnibox.onInputStarted.addListener(
 );
 
 // Filter a list using substrings
+// TODO make sure it matches perfect matches
 function filterSubreddits(text, subs) {
   var ret = [];
   subs.forEach(function(sub) {
