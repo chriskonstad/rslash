@@ -110,27 +110,25 @@ chrome.omnibox.onInputEntered.addListener(
       var url = "https://www.reddit.com/r/" + subreddit;
       console.log("Redirecting to: " + url);
       chrome.tabs.update(tab.id, {url: url}, function() {
-        chrome.tabs.onUpdated.addListener(function updateListener(id, changes, tab) {
 
-          // TODO check for 302 and 404's
+        // Use webrequests to figure out if subreddit exists or not
+        chrome.webRequest.onHeadersReceived.addListener(
+          function headerListener(details) {
+          // Wait for this subreddit's header
+          if(details.url == url) {
 
-          // Check if the subreddit is loading, or if redirected to search page
-          console.log(changes);
-          if(id === tab.id && "loading" === changes.status) {
-            // Add subreddit to visited-subreddit list
-            // Don't save any data in incognito mode
-            console.log("'" + url + "' vs '" + changes.url + "'");
-            console.log(url == changes.url);
-            console.log(!tab.incognito);
-            if(!tab.incognito && url == changes.url) {
+            // Don't save in incognito, if 404 (no subreddit) or
+            // 302 (subreddit search)
+            if(!tab.incognito &&
+               404 != details.statusCode &&
+               302 != details.statusCode) {
               saveSubreddit(subreddit);
-            } else {
-              console.log("Didn't save");
             }
 
-            chrome.tabs.onUpdated.removeListener(updateListener);
+            // Stop listening
+            chrome.webRequest.onHeadersReceived.removeListener(headerListener);
           }
-        });
+        }, {urls: ["*://*.reddit.com/r/*"]});
       });
     })
   });

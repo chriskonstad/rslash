@@ -4,13 +4,15 @@
   "version": "1.0",
   "background": {
     "scripts": ["background.js"],
-    "persistent": false
+    "persistent": true
   },
   "omnibox": { "keyword" : "r" },
   "manifest_version": 2,
   "permissions": [
     "storage",
-    "tabs"
+    "tabs",
+    "webRequest",
+    "*://*.reddit.com/"
   ],
   "options_page": "options.html",
   "options_ui": {
