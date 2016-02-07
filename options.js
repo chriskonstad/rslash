@@ -1,5 +1,4 @@
 function clear_subreddits() {
-  // TODO ask for user confirmation, but confirm doesn't work on Options2
   chrome.storage.sync.clear(function() { loadData(); });
 }
 

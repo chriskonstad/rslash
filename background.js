@@ -1,5 +1,4 @@
 // Chris Konstad, 2016
-// TODO remove alerts for production?
 
 // important variables
 var storage = chrome.storage.sync;
@@ -38,16 +37,12 @@ function saveSubreddit(subreddit) {
 }
 
 function loadData() {
-  console.log("loading data");
   storage.get(null, function(items) {
     subs = [];
     for(var key in items) {
         counts = items;
         subs.push(key);
     }
-    //console.log(JSON.stringify(items));
-    //console.log(JSON.stringify(subs));
-    //console.log(JSON.stringify(counts));
   });
 }
 
@@ -59,7 +54,6 @@ chrome.omnibox.onInputStarted.addListener(
 );
 
 // Filter a list using substrings
-// TODO make sure it matches perfect matches
 function filterSubreddits(text, subs) {
   var ret = [];
   subs.forEach(function(sub) {
@@ -75,10 +69,6 @@ function filterSubreddits(text, subs) {
 chrome.omnibox.onInputChanged.addListener(
   function(text, suggest) {
     console.log('inputChanged: "' + text + '"');
-    // TODO add smart suggestions
-    // TODO match fuzzy substrings
-    // TODO sort by closeness
-
     // Get visited subreddits that contain the text as a substring
     var subsToSuggest = filterSubreddits(text, subs);
 
